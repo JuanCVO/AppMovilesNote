@@ -72,7 +72,6 @@
           border-radius: 10px;
         }
 
-        /* Estilo adicional para el mensaje de registro */
         .registered-message {
           display: none;
           color: green;
@@ -85,15 +84,23 @@
     <div class="form-container">
         <i class="fas fa-home home-icon"></i>
         <p>
-            <ons-input id="username" modifier="underbar" placeholder="Username" float></ons-input>
+            <ons-input id="nombre_usu" modifier="underbar" placeholder="Name" float></ons-input>
         </p>
         <p>
-            <ons-input id="password" modifier="underbar" type="password" placeholder="Password" float></ons-input>
+            <ons-input id="email_usu" modifier="underbar" placeholder="Email" float></ons-input>
         </p>
         <p>
-            <ons-button class="register-button" onclick="registrar()">Registrarse</ons-button>
+            <ons-input id="username_usu" modifier="underbar" placeholder="Username" float></ons-input>
         </p>
-        <!-- Mensaje de registro -->
+        <p>
+            <ons-input id="password_usu" modifier="underbar" type="password" placeholder="Password" float></ons-input>
+        </p>
+        <p>
+            <ons-input id="cellphone_usu" modifier="underbar" placeholder="Cellphone" float></ons-input>
+        </p>
+        <p>
+            <ons-button id="guardar-button" >Registrarse</ons-button>
+        </p>
         <div id="registered-message" class="registered-message">Registrado correctamente</div>
     </div>
     <div class="quote">
