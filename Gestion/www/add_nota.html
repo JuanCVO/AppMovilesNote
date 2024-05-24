@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Nota</title>
+    <link rel="stylesheet" href="css/add_nota.css">
+</head>
+<body>
+<div class="container">
+    <h1>Lista de Tareas</h1>
+    <form id="taskForm">
+        <input type="text" id="taskName" placeholder="Nombre de la tarea" required>
+        <input type="text" id="taskDescription" placeholder="Descripción de la tarea" required>
+        <input type="date" id="taskStartDate" required>
+        <input type="date" id="taskEndDate" required>
+
+        <input type="text" id="taskLocation" style="display: none;"> <!-- Campo oculto para almacenar la geolocalización -->
+
+        <p id="geoLocationDisplay"></p> <!-- Elemento donde se mostrará la geolocalización -->
+
+        <button class="geo-button" type="button" id="getGeoLocation">Obtener Geolocalización</button>
+
+        <button type="submit">Añadir Tarea</button>
+    </form>
+    <ul id="taskList"></ul>
+</div>
+
+<!-- Modal -->
+<div id="taskModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="editTaskForm">
+            <input type="text" id="editTaskName" placeholder="Nombre de la tarea" required>
+            <input type="text" id="editTaskDescription" placeholder="Descripción de la tarea" required>
+            <input type="date" id="editTaskStartDate" required>
+            <input type="date" id="editTaskEndDate" required>
+
+            <button type="submit">Guardar Cambios</button>
+        </form>
+    </div>
+</div>
+
+<script src="js/add_nota.js"></script>
+</body>
+</html>
