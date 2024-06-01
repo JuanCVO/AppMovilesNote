@@ -1,110 +1,139 @@
 var global_database;
 var isDatabaseOpen = false;
 var isTableCreated = false;
-var userList = [];
 
-document.addEventListener('pause', onPause, false);
+document.addEventListener('DOMContentLoaded', onDeviceReady, false);
 
-function onPause() {
-    if (isDatabaseOpen) {
-        closeDatabase();
-    }
+function onDeviceReady() {
+    console.log('Iniciando aplicación en navegador');
+    openDatabase();
 }
-document.addEventListener('deviceready', onDeviceReady, false);
 
-function onDeviceReady(){
-    console.log('Running Cordova'+ cordova.platformId + 'version' + cordova.version);
-    global_database = window.sqlitePlugin.openDatabase(
-        {
-            name: 'my.db',
-            location: 'default',
-            androidDatabaseProvider: 'system',
-            androidLockWorkaround:1
-        },
-        function(db){
-            console.log('Base de datos abierta', db);
+function openDatabase() {
+    if (!window.indexedDB) {
+        alert("Tu navegador no soporta una versión estable de IndexedDB. Algunas funcionalidades no estarán disponibles.");
+    } else {
+        var request = window.indexedDB.open("myDB", 1);
+
+        request.onerror = function(event) {
+            console.error('Error al abrir la base de datos', event);
+        };
+
+        request.onsuccess = function(event) {
+            global_database = event.target.result;
             isDatabaseOpen = true;
+            console.log('La base de datos está abierta.');
             createTable();
-        },
-        function(error){
-            console.log('Error al abrir la base de datos', error);
-        }
-    );
+        };
+
+        request.onupgradeneeded = function(event) {
+            global_database = event.target.result;
+            var objectStore = global_database.createObjectStore("usuario", { keyPath: "Id_user", autoIncrement: true });
+            objectStore.createIndex("email_user", "email_user", { unique: true });
+            objectStore.createIndex("username", "username", { unique: false });
+            objectStore.createIndex("password_user", "password_user", { unique: false });
+            console.log('Tabla creada.');
+        };
+    }
 }
 
 function createTable() {
-    global_database.transaction(function(tx){
-        tx.executeSql('CREATE TABLE IF NOT EXISTS usuario (Id_user INTEGER PRIMARY KEY, nombre_user TEXT, email_user TEXT NOT NULL UNIQUE, username TEXT, phone_user TEXT, password_user TEXT)', [],
-        function(tx, result){
-            console.log('Tabla usuario creada', result);
-            isTableCreated = true;
-        },
-        function(tx, error){
-            console.log('Error al crear la tabla usuario', error);
-        });
-    });
+    if (isDatabaseOpen) {
+        isTableCreated = true;
+        insertExampleUser();
+    }
 }
 
-function createUser(nombre, email, username, phone, password) {
-    global_database.transaction(function(tx){
-        tx.executeSql('SELECT COUNT(*) AS count FROM usuario WHERE email_user = ?', [email], function(tx, res) {
-            if (res.rows.item(0).count === 0) {
-                // El usuario no existe, inserta los datos
-                tx.executeSql('INSERT INTO usuario (nombre_user, email_user, username, phone_user, password_user) VALUES (?, ?, ?, ?, ?)', [nombre, email, username, phone, password],
-                function(tx, results) {
-                    selectData();
-                },
-                function(tx, error) {
-                    console.error('Error al insertar datos:', error);
-                    alert('Error al insertar datos'+ error.message);
-                });
-            } else {
-                // El usuario ya existe, no insertes nada
-                console.log('El usuario ya existe');
-                alert('El usuario ya existe');
-            }
-        }, function(tx, error){
-            console.log('Error al realizar la consulta', error);
-            alert('Error al realizar la consulta'+ error.message);
-        });
+function insertExampleUser() {
+    if (!isDatabaseOpen || !isTableCreated) {
+        console.log('La base de datos o la tabla no están listas');
+        return;
+    }
+
+    var transaction = global_database.transaction(["usuario"], "readwrite");
+    transaction.oncomplete = function(event) {
+        console.log('Transacción completada.');
+    };
+
+    transaction.onerror = function(event) {
+        console.error('Error en la transacción', event);
+    };
+
+    var objectStore = transaction.objectStore("usuario");
+    var request = objectStore.add({
+        nombre_user: 'Juan Perez',
+        email_user: 'juan@example.com',
+        username: 'juan123',
+        phone_user: '1234567890',
+        password_user: 'password123'
     });
+
+    request.onsuccess = function(event) {
+        console.log('Usuario de ejemplo añadido con éxito');
+    };
+
+    request.onerror = function(event) {
+        console.error('Error al añadir usuario de ejemplo', event.target.error);
+    };
 }
-function register() {
-    // Asegúrate de que la ruta al archivo de registro es correcta
-    window.location.href = 'user_create.html';
+
+function loginUser(username, password) {
+    if (!isDatabaseOpen || !isTableCreated) {
+        console.log('La base de datos no está lista');
+        alert('La base de datos no está lista. Por favor, inténtalo de nuevo en un momento.');
+        return;
+    }
+
+    var transaction = global_database.transaction(["usuario"]);
+    var objectStore = transaction.objectStore("usuario");
+    var index = objectStore.index("username");
+
+    var request = index.get(username);
+    request.onsuccess = function(event) {
+        var result = event.target.result;
+        if (result && result.password_user === password) {
+            console.log('Inicio de sesión exitoso');
+            window.location.href = 'html/blank_page.html';
+        } else {
+            console.log('Credenciales incorrectas');
+            alert('Correo electrónico o contraseña incorrectos');
+        }
+    };
+
+    request.onerror = function(event) {
+        console.error('Error al iniciar sesión', event);
+    };
 }
 
 document.addEventListener('init', function(event) {
     var page = event.target;
-    var usermail='';
 
-        if (page.querySelector('#register-button')) {
-            page.querySelector('#register-button').onclick = function() {
-                redirectToUserCreate();
-            };
+    if (page.id === 'login-page') {
+        if (page.querySelector('#login-button')) {
+            page.querySelector('#login-button').onclick = function() {
+                var username = document.querySelector('#username').value;
+                var password = document.querySelector('#password').value;
 
-        if (event.target.querySelector('#guardar-button')) {
-            event.target.querySelector('#guardar-button').onclick = function() {
-                var nombre = document.querySelector('#nombre_usu').value;
-                var email = document.querySelector('#email_usu').value;
-                var username = document.querySelector('#username_usu').value;
-                var password = document.querySelector('#password_usu').value;
-                var cellphone = document.querySelector('#cellphone_usu').value;
-
-                // Asegúrate de que el correo electrónico no es nulo o vacío
-                if (email && email.trim() !== '') {
-                    createUser(nombre, email, username, cellphone, password);
-                } else {
-                    console.error('El correo electrónico es obligatorio');
-                    alert('El correo electrónico es obligatorio');
+                if (!username || username.trim() === '') {
+                    alert('El nombre de usuario es obligatorio');
+                    return;
                 }
 
-                document.getElementById('guardando-dialog').show();
+                if (!password || password.trim() === '') {
+                    alert('La contraseña es obligatoria');
+                    return;
+                }
 
-                setTimeout(function() {
-                    document.getElementById('guardando-dialog').hide();
-                }, 2000);
+                loginUser(username, password);
             };
         }
     }
 });
+
+setInterval(function() {
+    if (!isDatabaseOpen || !isTableCreated) {
+        console.log('Esperando a que la base de datos esté lista...');
+    } else {
+        console.log('La base de datos está lista.');
+    }
+}, 1000);
