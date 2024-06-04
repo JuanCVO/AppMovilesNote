@@ -1,18 +1,45 @@
 function login() {
-      // Redirigir a la página de inicio de sesión
-      window.location.href = 'principal.html'; // Cambia 'login.html' a la URL de tu página de inicio de sesión
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const storedUser = localStorage.getItem(username);
+
+    if (storedUser) {
+        const user = JSON.parse(storedUser);
+        if (user.password === password) {
+            // Guardar el nombre de usuario logueado
+            localStorage.setItem('loggedInUser', username);
+
+            // Redirigir a la página principal
+            window.location.href = 'principal.html';
+        } else {
+            alert('Contraseña incorrecta.');
+        }
+    } else {
+        alert('Usuario no encontrado.');
     }
+}
 
 function register() {
-      // Redirigir a la página de registro
-      window.location.href = 'registro.html'; // Cambia 'register.html' a la URL de tu página de registro
-    }
- function registrar() {
-      // Mostrar mensaje de registro exitoso
-      document.getElementById('registered-message').style.display = 'block';
-      // Redirigir a otra página después de 2 segundos (2000 milisegundos)
-      setTimeout(function() {
-        window.location.href = 'index.html'; // Cambia 'bienvenido.html' a la URL de tu página de bienvenida
-      }, 2000);
-    }
+    window.location.href = 'registro.html';
+}
 
+function registrar() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    if (username && password) {
+        const user = {
+            username: username,
+            password: password
+        };
+
+        localStorage.setItem(username, JSON.stringify(user));
+        document.getElementById('registered-message').style.display = 'block';
+
+        setTimeout(function() {
+            window.location.href = 'index.html';
+        }, 2000);
+    } else {
+        alert('Por favor, completa todos los campos.');
+    }
+}
