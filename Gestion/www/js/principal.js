@@ -1,7 +1,7 @@
-// Función para actualizar la lista de tareas en la interfaz de usuario
+
 function updateTaskList(tasks) {
     const taskContainer = document.getElementById('taskContainer');
-    taskContainer.innerHTML = ''; // Limpiar el contenedor de tareas
+    taskContainer.innerHTML = '';
 
     tasks.forEach(function(task, index) {
         const taskCard = document.createElement('div');
@@ -18,7 +18,7 @@ function updateTaskList(tasks) {
         taskDescription.textContent = task.description.length > 100 ? task.description.substring(0, 100) + '...' : task.description;
 
         const taskLocation = document.createElement('p');
-        taskLocation.textContent = `Ubicación: ${task.location}`; // Mostrar la geolocalización
+        taskLocation.textContent = `Ubicación: ${task.location}`;
 
         const editLocationButton = document.createElement('button');
         editLocationButton.textContent = 'Modificar nota';
@@ -36,7 +36,7 @@ function updateTaskList(tasks) {
     });
 }
 
-// Función para manejar la edición de la ubicación de una tarea
+
 function editTaskLocation(index) {
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     const task = tasks[index];
@@ -51,7 +51,7 @@ function editTaskLocation(index) {
     const modal = document.getElementById('taskModal');
     modal.style.display = 'block';
 
-    // Obtener nueva geolocalización
+
     document.getElementById('getNewGeoLocation').addEventListener('click', function() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
@@ -82,25 +82,25 @@ function editTaskLocation(index) {
         modal.style.display = 'none';
 
         alert('Cambios guardados exitosamente.');
-        updateTaskList(tasks); // Actualizar la lista de tareas sin recargar la página
+        updateTaskList(tasks); /
     };
 
-    // Agregar evento al botón "Eliminar Tarea"
+
     document.getElementById('deleteTaskButton').onclick = function() {
-        tasks.splice(index, 1); // Eliminar la tarea del arreglo
-        localStorage.setItem('tasks', JSON.stringify(tasks)); // Actualizar el almacenamiento local
-        modal.style.display = 'none'; // Ocultar el modal
+        tasks.splice(index, 1);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        modal.style.display = 'none';
         alert('Tarea eliminada exitosamente.');
-        updateTaskList(tasks); // Actualizar la lista de tareas sin recargar la página
+        updateTaskList(tasks);
     };
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     const taskContainer = document.getElementById('taskContainer');
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    updateTaskList(tasks); // Inicializar la lista de tareas
+    updateTaskList(tasks);
 
-    // Mostrar el nombre de usuario logueado
+
     const showUsernameButton = document.getElementById('showUsernameButton');
     showUsernameButton.addEventListener('click', function() {
         const username = localStorage.getItem('loggedInUser');
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Cerrar sesión y redirigir a login.html
+
     const logoutButton = document.getElementById('logoutButton');
     logoutButton.addEventListener('click', function() {
         localStorage.removeItem('loggedInUser');
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = 'index.html';
     });
 
-    // Código para manejar el modal de edición
+
     const modal = document.getElementById('taskModal');
     const span = document.getElementsByClassName('close')[0];
 
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // Filtrar tareas por nombre al escribir en la barra de búsqueda
+
     const searchBar = document.getElementById('searchBar');
     searchBar.addEventListener('input', function() {
         const searchText = searchBar.value.toLowerCase();

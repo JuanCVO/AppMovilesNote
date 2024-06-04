@@ -6,10 +6,10 @@ function login() {
     if (storedUser) {
         const user = JSON.parse(storedUser);
         if (user.password === password) {
-            // Guardar el nombre de usuario logueado
+
             localStorage.setItem('loggedInUser', username);
 
-            // Redirigir a la página principal
+
             window.location.href = 'principal.html';
         } else {
             alert('Contraseña incorrecta.');

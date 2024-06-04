@@ -5,14 +5,14 @@ document.getElementById('taskForm').addEventListener('submit', function(event) {
     const taskDescription = document.getElementById('taskDescription').value;
     const taskStartDate = document.getElementById('taskStartDate').value;
     const taskEndDate = document.getElementById('taskEndDate').value;
-    const taskLocation = document.getElementById('taskLocation').value; // Agregado para obtener la geolocalización
+    const taskLocation = document.getElementById('taskLocation').value;
 
     const task = {
         name: taskName,
         description: taskDescription,
         startDate: taskStartDate,
         endDate: taskEndDate,
-        location: taskLocation // Agregado para almacenar la geolocalización
+        location: taskLocation /
     };
 
     let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -22,7 +22,7 @@ document.getElementById('taskForm').addEventListener('submit', function(event) {
     document.getElementById('taskForm').reset();
     alert('Tarea añadida exitosamente.');
 
-    // Redirigir a principal.html después de agregar la tarea
+
     window.location.href = 'principal.html';
 });
 
@@ -33,7 +33,7 @@ document.getElementById('getGeoLocation').addEventListener('click', function() {
             const longitude = position.coords.longitude;
             const location = `Latitud: ${latitude}, Longitud: ${longitude}`;
             document.getElementById('taskLocation').value = location;
-            document.getElementById('geoLocationDisplay').textContent = location; // Mostrar la geolocalización debajo del campo de fecha
+            document.getElementById('geoLocationDisplay').textContent = location;
         }, function(error) {
             alert('Error al obtener la geolocalización.');
         });
