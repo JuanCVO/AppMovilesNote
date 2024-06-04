@@ -4,7 +4,74 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/onsenui/css/onsenui.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/onsenui/css/onsen-css-components.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+        }
+
+        .form-container {
+          background-color: rgba(255, 255, 255, 0.8);
+          padding: 20px;
+          border-radius: 15px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+          width: 100%;
+          max-width: 448px;
+          text-align: center;
+        }
+
+        .form-container p {
+          margin: 50px 0;
+        }
+
+        .form-container ons-input {
+          width: 100%;
+        }
+
+        .form-container ons-button {
+          background-color: #007bff;
+          color: white;
+          border-radius: 20px;
+          padding: 10px 20px;
+          font-size: 18px;
+          margin: 10px 0;
+          width: 100%;
+        }
+
+        .form-container ons-button:hover {
+          background-color: #0056b3;
+        }
+
+        .form-container .register-button {
+          background-color: #28a745;
+        }
+
+        .form-container .register-button:hover {
+          background-color: #218838;
+        }
+
+        .form-container .home-icon {
+          font-size: 50px;
+          color: #007bff;
+          margin-bottom: 20px;
+        }
+
+        .quote {
+          margin-top: 20px;
+          color: white;
+          font-size: 18px;
+          text-align: center;
+          width: 100%;
+          max-width: 475px;
+          background-color: rgba(0, 0, 0, 0.5);
+          padding: 10px;
+          border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
 <ons-page>
@@ -17,7 +84,7 @@
             <ons-input id="password" modifier="underbar" type="password" placeholder="Password" float></ons-input>
         </p>
         <p style="margin-top: 30px;">
-            <ons-button id="login-button">Sign in</ons-button>
+            <ons-button onclick="login()">Sign in</ons-button>
         </p>
         <p>
             <ons-button class="register-button" onclick="register()">Registrarse</ons-button>

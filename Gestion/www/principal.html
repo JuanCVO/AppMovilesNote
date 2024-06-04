@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Principal</title>
+    <link rel="stylesheet" href="css/principal.css">
+    <link rel="stylesheet" href="css/add_nota.css">
+</head>
+<body>
+<div class="container">
+    <h1>Tareas Guardadas</h1>
+    <input type="text" id="searchBar" placeholder="Buscar tareas...">
+    <div id="taskContainer"></div>
+    <button onclick="window.location.href = 'add_nota.html';">Ir a Añadir Notas</button>
+    <button id="showUsernameButton">Mostrar Usuario</button>
+    <button id="logoutButton">Cerrar Sesión</button>
+</div>
+
+<div id="taskModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="editTaskForm">
+            <input type="text" id="editTaskName" placeholder="Nombre de la tarea" required>
+            <input type="text" id="editTaskDescription" placeholder="Descripción de la tarea" required>
+            <input type="date" id="editTaskStartDate" required>
+            <input type="date" id="editTaskEndDate" required>
+            <input type="text" id="editTaskLatitude" placeholder="Latitud" required>
+            <input type="text" id="editTaskLongitude" placeholder="Longitud" required>
+            <button type="button" id="getNewGeoLocation">Obtener Nueva Geolocalización</button>
+            <button type="submit">Guardar Cambios</button>
+            <button type="button" id="deleteTaskButton">Eliminar Tarea</button>
+        </form>
+    </div>
+</div>
+
+<script src="js/principal.js"></script>
+</body>
+</html>
+
